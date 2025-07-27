@@ -1,0 +1,170 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>  <html lang="id">  
+<head>  
+  <meta charset="UTF-8">  
+  <title>ZYCSH7</title>  
+  <title>ཀ‌</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">  
+  <style>  
+    body {  
+      margin: 0;  
+      font-family: 'Courier New', monospace;  
+      background-color: #000;  
+      color: white;  
+      text-align: center;  
+      padding: 40px 20px;  
+    }  input[type="text"], input[type="password"] {  
+  display: block;  
+  margin: 20px auto;  
+  padding: 18px 20px;  
+  font-size: 18px;  
+  width: 80%;  
+  max-width: 400px;  
+  border-radius: 20px;  
+  border: 2px solid white;  
+  background-color: transparent;  
+  color: red;  
+  text-align: center;  
+  outline: none;  
+}  
+
+input::placeholder {  
+  color: red;  
+  opacity: 0.6;  
+}  
+
+.glass-box {  
+  background: rgba(255, 255, 255, 0.05);  
+  padding: 20px;  
+  border-radius: 15px;  
+  margin: 20px auto;  
+  max-width: 450px;  
+  box-shadow: 0 0 15px red;  
+}  
+
+button {  
+  background: linear-gradient(135deg, #ff0044, #ff6600);  
+  color: black;  
+  width: 100%;  
+  padding: 14px;  
+  border-radius: 50px;  
+  font-size: 1rem;  
+  cursor: pointer;  
+  display: flex;  
+  align-items: center;  
+  justify-content: center;  
+  gap: 10px;  
+  border: none;  
+  box-shadow: 0 0 15px red;  
+  transition: 0.3s;  
+  margin-top: 10px;  
+}  
+
+.bug-card {  
+  background: rgba(255, 255, 255, 0.05);  
+  border: 1px solid rgba(255, 255, 255, 0.1);  
+  border-radius: 15px;  
+  padding: 12px 20px;  
+  display: flex; align-items: center;  
+  gap: 10px; cursor: pointer; transition: 0.3s;  
+}  
+
+.bug-card.active {  
+  border: 2px solid #00ff88;  
+  box-shadow: 0 0 12px #00ff88;  
+}  
+
+.spinner {  
+  border: 3px solid #ccc;  
+  border-top: 3px solid #00ff88;  
+  border-radius: 50%;  
+  width: 18px;  
+  height: 18px;  
+  animation: spin 0.8s linear infinite;  
+}  
+
+@keyframes spin {  
+  0% { transform: rotate(0deg); }  
+  100% { transform: rotate(360deg); }  
+}  
+
+#popup {  
+  position: fixed;  
+  top: 0; left: 0; width: 100%; height: 100%;  
+  background: rgba(0, 0, 0, 0.6);  
+  display: none; justify-content: center; align-items: center;  
+  z-index: 999;  
+}  
+
+.popup-content {  
+  background: #1a1a1a;  
+  color: #00ff88;  
+  padding: 30px;  
+  border-radius: 15px;  
+  text-align: center;  
+  max-width: 90%;  
+  box-shadow: 0 0 20px #00ff88;  
+}  
+
+.popup-content .close-btn {  
+  position: absolute;  
+  top: 10px; right: 15px;  
+  font-size: 1.5rem;  
+  color: #ff4d4d;  
+  cursor: pointer;  
+}
+
+  </style>  
+</head>  
+<body> 
+    <input type="text" id="target" placeholder="628xxxx" />  
+    <div class="bug-options">  
+      <div class="bug-card active" data-bug="Crashtotalvis"><i class="fas fa-skull-crossbones"></i><span>FC Invisible</span></div>  
+      <div class="bug-card" data-bug="Forceclose"><i class="fas fa-bomb"></i><span>Fc WA</span></div>  
+      <div class="bug-card" data-bug="Delay"><i class="fas fa-clock"></i><span>Invis Delay</span></div>  
+      <div class="bug-card" data-bug="Blank Chat"><i class="fas fa-eye-slash"></i><span>Blank WhatsApp</span></div>  
+    </div>  
+    <button id="sendBtn" onclick="sendBug()"><i class="fas fa-bug"></i> Kirim Bug</button>  
+    <div id="result"></div>  
+    <button class="small-logout" onclick="logout()">Logout</button>  
+  </div>    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>    <script>
+    let selectedBug = "Crashtotalvis";  
+    document.querySelectorAll(".bug-card").forEach(card => {  
+      card.addEventListener("click", () => {  
+        document.querySelectorAll(".bug-card").forEach(c => c.classList.remove("active"));  
+        card.classList.add("active");  
+        selectedBug = card.getAttribute("data-bug");  
+      });  
+    });  
+async function sendBug() {
+  const input = document.getElementById("target").value.trim();
+  const resDiv = document.getElementById("result");
+  const btn = document.getElementById("sendBtn");
+
+        if (!/^(\d+)(@s\.whatsapp\.net)?$/.test(input)) {  
+        resDiv.innerText = "Masukkan nomor WA yang valid!";  
+        resDiv.style.color = "crimson";  
+        return;  
+      }
+
+  const chatId = `${input}@s.whatsapp.net`;
+  btn.disabled = true;
+  const originalHTML = btn.innerHTML;
+  btn.innerHTML = '<span class="spinner"></span> Mengirim...';
+  resDiv.innerText = "";
+
+  try {
+    const res = await fetch(`/api/bug/forcecall?target=${encodeURIComponent(chatId)}`);
+    const json = await res.json();
+    resDiv.innerText = "Apocalypse Bug berhasil"
+  } catch (err) {
+    resDiv.innerText = "❌ Gagal kirim: " + err;
+    resDiv.style.color = "crimson";
+  }
+u
+  btn.disabled = false;
+  btn.innerHTML = originalHTML;
+}
+  </script>
+  </body>  
+</html>
