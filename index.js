@@ -87,10 +87,11 @@ async function clientstart() {
     });
 
     if (!client.authState.creds.registered) {
-        const phoneNumber = await question('Please enter your WhatsApp number (start with 62):\n> ');
-        const code = await client.requestPairingCode(phoneNumber, "KIUU1234");
-        console.log(chalk.greenBright(`[✅] Your pairing code: ${code}`));
-    }
+    const phoneNumber = "628XXXXXXX"; // ganti dengan nomor kamu
+    const code = await client.requestPairingCode(phoneNumber, "KIUU1234");
+    console.log(chalk.greenBright(`[✅] Pairing code untuk ${phoneNumber}: ${code}`));
+}
+
 
     client.ev.on('connection.update', (update) => {
         const { konek } = require('./connect')
